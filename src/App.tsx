@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Navigation from "./components/Navigation";
 import Home from './views/Home';
 import LoggedOut from './views/LoggedOut';
+import Container from 'react-bootstrap/Container'
 
 
 export default function App() {
@@ -32,11 +33,13 @@ export default function App() {
     return (
         <div>
             <Navigation isLoggedIn={isLoggedIn}/>
-            { isLoggedIn ? (
-                <Home name={name} posts={posts} handleClick={handleClick}/>
-            ) : (
-                <LoggedOut handleClick={handleClick}/>
-            )}
+            <Container>
+                { isLoggedIn ? (
+                    <Home name={name} posts={posts} handleClick={handleClick}/>
+                ) : (
+                    <LoggedOut handleClick={handleClick}/>
+                )}
+            </Container>
         </div>
     )
 }
