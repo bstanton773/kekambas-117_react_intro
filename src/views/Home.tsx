@@ -34,6 +34,7 @@ export default function Home({ name, handleClick }: HomeProps) {
             <Button variant="danger" onClick={handleClick}>Log Out</Button>
             <PostForm handleSubmit={handleFormSubmit} newPost={newPost} handleChange={handleInputChange}/>
             {posts.map( p => <li key={p.id}>{p.title}</li>)}
+            <Button variant='info' onClick={() => {setPosts([])}}>Clear All Posts</Button>
         </>
     )
 }
