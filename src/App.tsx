@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import Navigation from "./components/Navigation";
-import Button from "react-bootstrap/Button";
+import Home from './views/Home';
+import LoggedOut from './views/LoggedOut';
+
 
 export default function App() {
     const name: string = 'Brian';
@@ -31,16 +33,9 @@ export default function App() {
         <div>
             <Navigation isLoggedIn={isLoggedIn}/>
             { isLoggedIn ? (
-                <>
-                    <h1>Hello {name.toUpperCase()}</h1>
-                    <Button variant="danger" onClick={handleClick}>Log Out</Button>
-                    {posts.map( p => <li key={p.id}>{p.title}</li>)}
-                </>
+                <Home name={name} posts={posts} handleClick={handleClick}/>
             ) : (
-                <>
-                    <h1>Hello and Welcome</h1>
-                    <Button variant="primary" onClick={handleClick}>Log In</Button>
-                </>
+                <LoggedOut handleClick={handleClick}/>
             )}
         </div>
     )
