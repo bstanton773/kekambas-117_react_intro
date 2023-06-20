@@ -1,3 +1,4 @@
+import Navigation from "./components/Navigation";
 
 export default function App() {
     const name: string = 'Brian';
@@ -21,6 +22,7 @@ export default function App() {
 
     return (
         <div>
+            <Navigation isLoggedIn={isLoggedIn}/>
             { isLoggedIn ? (
                 <>
                     <h1>Hello {name.toUpperCase()}</h1>
