@@ -11,20 +11,6 @@ export default function App() {
     // let isLoggedIn: boolean = false;
     const [isLoggedIn, setLoggedIn] = useState(false)
 
-    const posts: {id:number, title:string}[] = [
-        {
-            id: 1,
-            title: 'First Post'
-        },
-        {
-            id: 2,
-            title: 'Second Post'
-        },
-        {
-            id: 3,
-            title: 'Third Post'
-        },
-    ]
 
     const handleClick = (_:React.MouseEvent):void => {
         setLoggedIn(!isLoggedIn)
@@ -35,7 +21,7 @@ export default function App() {
             <Navigation isLoggedIn={isLoggedIn}/>
             <Container>
                 { isLoggedIn ? (
-                    <Home name={name} posts={posts} handleClick={handleClick}/>
+                    <Home name={name} handleClick={handleClick}/>
                 ) : (
                     <LoggedOut handleClick={handleClick}/>
                 )}
