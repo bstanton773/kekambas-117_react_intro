@@ -12,7 +12,7 @@ export default function PostCard({ post }: PostCardProps) {
             <Card.Body>
                 <Card.Title>{post.title}</Card.Title>
                 <Card.Text>{post.body}</Card.Text>
-                <Card.Subtitle>By user</Card.Subtitle>
+                <Card.Subtitle>By {post.author?.firstName} {post.author?.lastName} </Card.Subtitle>
                 <Card.Text className='text-muted'>Date Created:</Card.Text>
             </Card.Body>
         </Card>
