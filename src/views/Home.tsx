@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import Button from "react-bootstrap/Button";
 import PostForm from '../components/PostForm';
+import PostCard from '../components/PostCard';
 import PostType from '../types/post';
 
 
 type HomeProps = {
     name: string
-    handleClick: (e:React.MouseEvent) => void
+    handleClick?: (e:React.MouseEvent) => void
 }
 
-export default function Home({ name, handleClick }: HomeProps) {
+export default function Home({ name }: HomeProps) {
     const [posts, setPosts] = useState<PostType[]>([]);
     const [newPost, setNewPost] = useState<PostType>({ id: 1, title: '', body: ''})
     const [displayForm, setDisplayForm] = useState(false)
@@ -19,10 +20,11 @@ export default function Home({ name, handleClick }: HomeProps) {
 
         setPosts([...posts, newPost]);
         setNewPost({ id: (posts.length + 2), title: '', body: ''})
+        setDisplayForm(false)
     }
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) : void => {
-        console.log(event.target.name, event.target.value)
+        // console.log(event.target.name, event.target.value)
         setNewPost({...newPost, [event.target.name]: event.target.value})
     }
 
@@ -31,7 +33,7 @@ export default function Home({ name, handleClick }: HomeProps) {
             <h1>Hello {name.toUpperCase()}</h1>
             <Button variant="danger" onClick={() => {setDisplayForm(!displayForm)}}>{displayForm ? 'Close X' : 'Compose +'}</Button>
             {displayForm && <PostForm handleSubmit={handleFormSubmit} newPost={newPost} handleChange={handleInputChange}/>}
-            {posts.map( p => <li key={p.id}>{p.title}</li>)}
+            {posts.map( p => <PostCard post={p} />)}
             <Button variant='info' onClick={() => {setPosts([])}}>Clear All Posts</Button>
         </>
     )
