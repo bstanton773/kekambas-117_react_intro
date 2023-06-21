@@ -5,8 +5,11 @@ import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import UserType from '../types/auth';
 
-type Props = {}
-export default function Login({}: Props) {
+type LoginProps = {
+    logUserIn: (user:UserType) => void
+}
+
+export default function Login({ logUserIn }: LoginProps) {
     const navigate = useNavigate();
 
     const [user, setUser] = useState<UserType>({id: 1, username: '', password: ''})
@@ -18,6 +21,16 @@ export default function Login({}: Props) {
     const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
         console.log(user);
+
+        // Creating Fake User Data
+        const firstNames = ['Kyle', 'Megan', 'Ally', 'Jack', 'Juan', 'Jeremy', 'Anna']
+        const lastNames = ['Stuart', 'Rojas', 'Williams', 'Smith', 'Johnson', 'McMulligan']
+        const randomFirstName = firstNames[Math.floor(Math.random() * firstNames.length)]
+        const randomLastName = lastNames[Math.floor(Math.random() * lastNames.length)]
+        const randomEmail = randomFirstName[0].toLowerCase() + randomLastName.toLowerCase() + '@kekambas.org'
+
+        // Log in the new user
+        logUserIn({...user, firstName: randomFirstName, lastName: randomLastName, email: randomEmail})
         navigate('/');
     }
 

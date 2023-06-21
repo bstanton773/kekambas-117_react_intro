@@ -5,9 +5,10 @@ import { Link } from 'react-router-dom';
 
 type NavigationProps = {
     isLoggedIn: boolean
+    logUserOut: () => void
 }
 
-export default function Navigation({ isLoggedIn }:NavigationProps) {
+export default function Navigation({ isLoggedIn, logUserOut }:NavigationProps) {
     return (
         <>
             <Navbar bg='dark' data-bs-theme='dark'>
@@ -16,7 +17,7 @@ export default function Navigation({ isLoggedIn }:NavigationProps) {
                     <Nav className='me-auto'>
                         { isLoggedIn ? (
                             <>
-                                <Nav.Link href='/'>Log Out</Nav.Link>
+                                <Nav.Link to='/' as={Link} onClick={logUserOut}>Log Out</Nav.Link>
                                 <Nav.Link href='/'>Create Post</Nav.Link>
                             </>
                         ) : (

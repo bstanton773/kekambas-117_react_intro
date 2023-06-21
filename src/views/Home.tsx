@@ -3,14 +3,15 @@ import Button from "react-bootstrap/Button";
 import PostForm from '../components/PostForm';
 import PostCard from '../components/PostCard';
 import PostType from '../types/post';
+import UserType from '../types/auth';
 
 
 type HomeProps = {
-    name: string
+    user: UserType|null
     handleClick?: (e:React.MouseEvent) => void
 }
 
-export default function Home({ name }: HomeProps) {
+export default function Home({ user }: HomeProps) {
     const [posts, setPosts] = useState<PostType[]>([]);
     const [newPost, setNewPost] = useState<PostType>({ id: 1, title: '', body: ''})
     const [displayForm, setDisplayForm] = useState(false)
@@ -30,8 +31,8 @@ export default function Home({ name }: HomeProps) {
 
     return (
         <>
-            <h1>Hello {name.toUpperCase()}</h1>
-            <Button variant="danger" onClick={() => {setDisplayForm(!displayForm)}}>{displayForm ? 'Close X' : 'Compose +'}</Button>
+            <h1>Hello {user?.firstName} {user?.lastName}</h1>
+            { user && <Button variant="danger" onClick={() => {setDisplayForm(!displayForm)}}>{displayForm ? 'Close X' : 'Compose +'}</Button>}
             {displayForm && <PostForm handleSubmit={handleFormSubmit} newPost={newPost} handleChange={handleInputChange}/>}
             {posts.map( p => <PostCard key={p.id} post={p} />)}
             <Button variant='info' onClick={() => {setPosts([])}}>Clear All Posts</Button>

@@ -4,26 +4,32 @@ import Navigation from "./components/Navigation";
 import Home from './views/Home';
 import Login from './views/Login';
 import Container from 'react-bootstrap/Container'
+import UserType from './types/auth';
 
 
 export default function App() {
-    const name: string = 'Brian';
 
     // let isLoggedIn: boolean = false;
     const [isLoggedIn, setLoggedIn] = useState(false)
+    const [loggedInUser, setLoggedInUser] = useState<UserType|null>(null)
 
+    const logUserIn = (user:UserType): void => {
+        setLoggedIn(true);
+        setLoggedInUser(user)
+    }
 
-    const handleClick = (_:React.MouseEvent):void => {
-        setLoggedIn(!isLoggedIn)
+    const logUserOut = (): void => {
+        setLoggedIn(false);
+        setLoggedInUser(null);
     }
 
     return (
         <div>
-            <Navigation isLoggedIn={isLoggedIn}/>
+            <Navigation isLoggedIn={isLoggedIn} logUserOut={logUserOut}/>
             <Container>
                 <Routes>
-                    <Route path='/' element={<Home name={name} />} />
-                    <Route path='/login' element={<Login />} />
+                    <Route path='/' element={<Home user={loggedInUser} />} />
+                    <Route path='/login' element={<Login logUserIn={logUserIn} />} />
                 </Routes>
                 
             </Container>
