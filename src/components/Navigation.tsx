@@ -1,6 +1,7 @@
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
+import { Link } from 'react-router-dom';
 
 type NavigationProps = {
     isLoggedIn: boolean
@@ -11,7 +12,7 @@ export default function Navigation({ isLoggedIn }:NavigationProps) {
         <>
             <Navbar bg='dark' data-bs-theme='dark'>
                 <Container>
-                    <Navbar.Brand href="/">Kekambas</Navbar.Brand>
+                    <Navbar.Brand to="/" as={Link}>Kekambas</Navbar.Brand>
                     <Nav className='me-auto'>
                         { isLoggedIn ? (
                             <>
@@ -20,7 +21,7 @@ export default function Navigation({ isLoggedIn }:NavigationProps) {
                             </>
                         ) : (
                             <>
-                                <Nav.Link href='/'>Log In</Nav.Link>
+                                <Nav.Link to='/login' as={Link}>Log In</Nav.Link>
                                 <Nav.Link href='/'>Sign Up</Nav.Link>
                             </>
                         )}

@@ -33,7 +33,7 @@ export default function Home({ name }: HomeProps) {
             <h1>Hello {name.toUpperCase()}</h1>
             <Button variant="danger" onClick={() => {setDisplayForm(!displayForm)}}>{displayForm ? 'Close X' : 'Compose +'}</Button>
             {displayForm && <PostForm handleSubmit={handleFormSubmit} newPost={newPost} handleChange={handleInputChange}/>}
-            {posts.map( p => <PostCard post={p} />)}
+            {posts.map( p => <PostCard key={p.id} post={p} />)}
             <Button variant='info' onClick={() => {setPosts([])}}>Clear All Posts</Button>
         </>
     )
