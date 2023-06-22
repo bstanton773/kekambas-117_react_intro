@@ -4,6 +4,7 @@ import Navigation from "./components/Navigation";
 import AlertMessage from './components/AlertMessage';
 import Home from './views/Home';
 import Login from './views/Login';
+import Register from './views/Register';
 import Container from 'react-bootstrap/Container'
 import UserType from './types/auth';
 import CategoryType from './types/category';
@@ -42,6 +43,7 @@ export default function App() {
                 <Routes>
                     <Route path='/' element={<Home user={loggedInUser} flashMessage={flashMessage}/>} />
                     <Route path='/login' element={<Login logUserIn={logUserIn}/>} />
+                    <Route path='/register' element={<Register />}/>
                 </Routes>
                 
             </Container>
