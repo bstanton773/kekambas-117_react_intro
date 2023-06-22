@@ -1,17 +1,36 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom'
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import UserType from '../types/auth';
+import { register } from '../lib/apiWrapper';
+import CategoryType from '../types/category';
 
-type Props = {}
+type RegisterProps = {
+    flashMessage: (message:string, category: CategoryType) => void
+}
 
-export default function Register({}: Props) {
+export default function Register({ flashMessage }: RegisterProps) {
 
     const [newUser, setNewUser] = useState<UserType>({firstName: '', lastName: '', username: '', email: '', password: ''})
 
+    const navigate = useNavigate()
+
     const handleInputChange = (e:React.ChangeEvent<HTMLInputElement>): void => {
         setNewUser({...newUser, [e.target.name]: e.target.value})
+    }
+
+    const handleFormSubmit = async (e:React.FormEvent<HTMLFormElement>): Promise<void> => {
+        e.preventDefault();
+
+        const response = await register(newUser)
+        if (response.error){
+            flashMessage(response.error, 'danger')
+        } else {
+            flashMessage(response.data?.username + ' has been created', 'success')
+            navigate('/')
+        }
     }
 
     return (
@@ -19,7 +38,7 @@ export default function Register({}: Props) {
             <h1 className="text-center">Register for Kekambas Blog</h1>
             <Card className='mt-3'>
                 <Card.Body>
-                    <Form>
+                    <Form onSubmit={handleFormSubmit}>
                         <Form.Label>First Name</Form.Label>
                         <Form.Control value={newUser.firstName} name='firstName' onChange={handleInputChange} />
                         <Form.Label>Last Name</Form.Label>
