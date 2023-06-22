@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Button from "react-bootstrap/Button";
 import PostForm from '../components/PostForm';
 import PostCard from '../components/PostCard';
 import PostType from '../types/post';
 import UserType from '../types/auth';
 import CategoryType from '../types/category';
+import { getAllPosts } from '../lib/apiWrapper';
 
 
 type HomeProps = {
@@ -17,6 +18,17 @@ export default function Home({ user, flashMessage }: HomeProps) {
     const [posts, setPosts] = useState<PostType[]>([]);
     const [newPost, setNewPost] = useState<PostType>({ id: 1, title: '', body: ''})
     const [displayForm, setDisplayForm] = useState(false)
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const response = await getAllPosts();
+            if (response.data){
+                setPosts(response.data)
+            }
+        }
+
+        fetchData();
+    }, [])
 
     const handleFormSubmit = (event: React.FormEvent) : void => {
         event.preventDefault();

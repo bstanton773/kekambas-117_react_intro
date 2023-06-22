@@ -6,6 +6,8 @@ type PostType = {
     title: string
     body: string
     author?: UserType
+    dateCreated?: string
+    imageURL?: string
 }
 
 export default PostType
