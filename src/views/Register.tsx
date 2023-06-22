@@ -9,9 +9,10 @@ import CategoryType from '../types/category';
 
 type RegisterProps = {
     flashMessage: (message:string, category: CategoryType) => void
+    logUserIn: (user:UserType) => void
 }
 
-export default function Register({ flashMessage }: RegisterProps) {
+export default function Register({ flashMessage, logUserIn }: RegisterProps) {
 
     const [newUser, setNewUser] = useState<UserType>({firstName: '', lastName: '', username: '', email: '', password: ''})
 
@@ -29,6 +30,7 @@ export default function Register({ flashMessage }: RegisterProps) {
             flashMessage(response.error, 'danger')
         } else {
             flashMessage(response.data?.username + ' has been created', 'success')
+            logUserIn(response.data!)
             navigate('/')
         }
     }
