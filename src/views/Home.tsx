@@ -5,7 +5,7 @@ import PostCard from '../components/PostCard';
 import PostType from '../types/post';
 import UserType from '../types/auth';
 import CategoryType from '../types/category';
-import { getAllPosts } from '../lib/apiWrapper';
+import { getAllPosts, createPost } from '../lib/apiWrapper';
 
 
 type HomeProps = {
@@ -16,7 +16,7 @@ type HomeProps = {
 
 export default function Home({ user, flashMessage }: HomeProps) {
     const [posts, setPosts] = useState<PostType[]>([]);
-    const [newPost, setNewPost] = useState<PostType>({ id: 1, title: '', body: ''})
+    const [newPost, setNewPost] = useState<PostType>({title: '', body: ''})
     const [displayForm, setDisplayForm] = useState(false)
 
     useEffect(() => {
@@ -30,14 +30,21 @@ export default function Home({ user, flashMessage }: HomeProps) {
         fetchData();
     }, [])
 
-    const handleFormSubmit = (event: React.FormEvent) : void => {
+    const handleFormSubmit = async (event: React.FormEvent) : Promise<void> => {
         event.preventDefault();
-
-        const newPostWithAuthor = {...newPost, author: user!}
-        setPosts([...posts, newPostWithAuthor]);
-        setNewPost({ id: (posts.length + 2), title: '', body: ''})
-        setDisplayForm(false)
-        flashMessage(newPost.title + ' has been created', 'success');
+        const token = localStorage.getItem('token')
+        const response = await createPost(newPost, token!)
+        if (response.error){
+            flashMessage(response.error, 'danger')
+        } else {
+            const response = await getAllPosts();
+            if (response.data){
+                setPosts(response.data)
+            }
+            setNewPost({ title: '', body: ''})
+            setDisplayForm(false)
+            flashMessage(newPost.title + ' has been created', 'success');
+        }
     }
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) : void => {

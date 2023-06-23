@@ -2,7 +2,7 @@ import UserType from './auth'
 
 
 type PostType = {
-    id: number
+    id?: number
     title: string
     body: string
     author?: UserType
