@@ -18,6 +18,7 @@ export default function Home({ user, flashMessage }: HomeProps) {
     const [posts, setPosts] = useState<PostType[]>([]);
     const [newPost, setNewPost] = useState<PostType>({title: '', body: ''})
     const [displayForm, setDisplayForm] = useState(false)
+    const [update, setUpdate] = useState(false)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -28,7 +29,7 @@ export default function Home({ user, flashMessage }: HomeProps) {
         }
 
         fetchData();
-    }, [])
+    }, [update])
 
     const handleFormSubmit = async (event: React.FormEvent) : Promise<void> => {
         event.preventDefault();
@@ -37,10 +38,7 @@ export default function Home({ user, flashMessage }: HomeProps) {
         if (response.error){
             flashMessage(response.error, 'danger')
         } else {
-            const response = await getAllPosts();
-            if (response.data){
-                setPosts(response.data)
-            }
+            setUpdate(!update)
             setNewPost({ title: '', body: ''})
             setDisplayForm(false)
             flashMessage(newPost.title + ' has been created', 'success');
@@ -57,7 +55,7 @@ export default function Home({ user, flashMessage }: HomeProps) {
             <h1>Hello {user?.firstName} {user?.lastName}</h1>
             { user && <Button variant="danger" onClick={() => {setDisplayForm(!displayForm)}}>{displayForm ? 'Close X' : 'Compose +'}</Button>}
             {displayForm && <PostForm handleSubmit={handleFormSubmit} newPost={newPost} handleChange={handleInputChange}/>}
-            {posts.map( p => <PostCard key={p.id} post={p} />)}
+            {posts.map( p => <PostCard key={p.id} post={p} user={user} setUpdate={setUpdate} update={update} />)}
             <Button variant='info' onClick={() => {setPosts([])}}>Clear All Posts</Button>
         </>
     )
