@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import UserType from '../types/auth';
-import { login } from '../lib/apiWrapper';
+import { login, getMe } from '../lib/apiWrapper';
 import CategoryType from '../types/category';
 
 type LoginProps = {
@@ -30,16 +30,16 @@ export default function Login({ logUserIn, flashMessage }: LoginProps) {
         } else {
             localStorage.setItem('token', response.data?.token as string)
             localStorage.setItem('tokenExp', response.data?.token_expiration as string)
-            // Creating Fake User Data
-            const firstNames = ['Kyle', 'Megan', 'Ally', 'Jack', 'Juan', 'Jeremy', 'Anna']
-            const lastNames = ['Stuart', 'Rojas', 'Williams', 'Smith', 'Johnson', 'McMulligan']
-            const randomFirstName = firstNames[Math.floor(Math.random() * firstNames.length)]
-            const randomLastName = lastNames[Math.floor(Math.random() * lastNames.length)]
-            const randomEmail = randomFirstName[0].toLowerCase() + randomLastName.toLowerCase() + '@kekambas.org'
-    
-            // Log in the new user
-            logUserIn({...user, firstName: randomFirstName, lastName: randomLastName, email: randomEmail})
-            navigate('/');
+            // Get the User from their token
+            const token = localStorage.getItem('token')
+            const userResponse = await getMe(token as string);
+            if (userResponse.error){
+                flashMessage(userResponse.error, 'danger')
+            } else {
+                // Log in the new user
+                logUserIn(userResponse.data!)
+                navigate('/');
+            }
         }
     }
 
