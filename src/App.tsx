@@ -42,7 +42,7 @@ export default function App() {
                 {message && <AlertMessage message={message} category={category} flashMessage={flashMessage}/>}
                 <Routes>
                     <Route path='/' element={<Home user={loggedInUser} flashMessage={flashMessage}/>} />
-                    <Route path='/login' element={<Login logUserIn={logUserIn}/>} />
+                    <Route path='/login' element={<Login logUserIn={logUserIn} flashMessage={flashMessage} />} />
                     <Route path='/register' element={<Register flashMessage={flashMessage} logUserIn={logUserIn} />}/>
                 </Routes>
                 

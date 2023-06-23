@@ -6,7 +6,7 @@ type PostCardProps = {
 }
 
 export default function PostCard({ post }: PostCardProps) {
-    console.log(post)
+    // console.log(post)
     return (
         <Card className='mt-3'>
             <Card.Body>

@@ -4,12 +4,15 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import UserType from '../types/auth';
+import { login } from '../lib/apiWrapper';
+import CategoryType from '../types/category';
 
 type LoginProps = {
     logUserIn: (user:UserType) => void
+    flashMessage: (message:string, category: CategoryType) => void
 }
 
-export default function Login({ logUserIn }: LoginProps) {
+export default function Login({ logUserIn, flashMessage }: LoginProps) {
     const navigate = useNavigate();
 
     const [user, setUser] = useState<UserType>({id: 1, username: '', password: ''})
@@ -18,20 +21,26 @@ export default function Login({ logUserIn }: LoginProps) {
         setUser({...user, [e.target.name]: e.target.value})
     }
 
-    const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+    const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
-        console.log(user);
 
-        // Creating Fake User Data
-        const firstNames = ['Kyle', 'Megan', 'Ally', 'Jack', 'Juan', 'Jeremy', 'Anna']
-        const lastNames = ['Stuart', 'Rojas', 'Williams', 'Smith', 'Johnson', 'McMulligan']
-        const randomFirstName = firstNames[Math.floor(Math.random() * firstNames.length)]
-        const randomLastName = lastNames[Math.floor(Math.random() * lastNames.length)]
-        const randomEmail = randomFirstName[0].toLowerCase() + randomLastName.toLowerCase() + '@kekambas.org'
-
-        // Log in the new user
-        logUserIn({...user, firstName: randomFirstName, lastName: randomLastName, email: randomEmail})
-        navigate('/');
+        const response = await login(user.username, user.password!)
+        if (response.error){
+            flashMessage(response.error, 'danger')
+        } else {
+            localStorage.setItem('token', response.data?.token as string)
+            localStorage.setItem('tokenExp', response.data?.token_expiration as string)
+            // Creating Fake User Data
+            const firstNames = ['Kyle', 'Megan', 'Ally', 'Jack', 'Juan', 'Jeremy', 'Anna']
+            const lastNames = ['Stuart', 'Rojas', 'Williams', 'Smith', 'Johnson', 'McMulligan']
+            const randomFirstName = firstNames[Math.floor(Math.random() * firstNames.length)]
+            const randomLastName = lastNames[Math.floor(Math.random() * lastNames.length)]
+            const randomEmail = randomFirstName[0].toLowerCase() + randomLastName.toLowerCase() + '@kekambas.org'
+    
+            // Log in the new user
+            logUserIn({...user, firstName: randomFirstName, lastName: randomLastName, email: randomEmail})
+            navigate('/');
+        }
     }
 
     return (

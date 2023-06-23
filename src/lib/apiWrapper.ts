@@ -12,10 +12,22 @@ const apiClientNoAuth = () => axios.create({
     baseURL: base
 })
 
+const apiClientBasicAuth = (username:string, password:string) => axios.create({
+    baseURL: base,
+    headers: {
+        Authorization: 'Bearer ' + btoa(username + ':' + password)
+    }
+})
+
 
 type APIResponse<T> = {
     error: string | undefined;
     data: T | undefined
+}
+
+type TokenType = {
+    token: string
+    token_expiration: string
 }
 
 
@@ -59,7 +71,28 @@ async function register(newUser: UserType): Promise<APIResponse<UserType>> {
 }
 
 
+async function login(username:string, password:string): Promise<APIResponse<TokenType>> {
+    let error;
+    let data;
+    try{
+        const response: AxiosResponse<TokenType> = await apiClientBasicAuth(username, password).get('/token')
+        data = response.data
+    } catch(err){
+        if (axios.isAxiosError(err)){
+            error = err.response?.data.error
+        } else {
+            error = 'Something went wrong'
+        }
+    }
+    return {
+        error,
+        data
+    }
+}
+
+
 export {
     getAllPosts,
-    register
+    register,
+    login
 }
